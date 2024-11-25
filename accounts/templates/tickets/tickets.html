@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Tickets{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Lista de Tickets</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Estado</th>
+            <th>Prioridad</th>
+            <th>Cliente</th>
+            <th>Asignado a</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ticket in tickets %}
+        <tr>
+            <td>{{ ticket.id }}</td>
+            <td>{{ ticket.title }}</td>
+            <td>{{ ticket.get_status_display }}</td>
+            <td>{{ ticket.get_priority_display }}</td>
+            <td>{{ ticket.Cliente }}</td>
+            <td>{{ ticket.assigned_to|default:"No asignado" }}</td>
+            <td>
+                <a href="{% url 'ticket_detalle' ticket.id %}" class="btn btn-sm btn-info">Ver</a>
+                <a href="{% url 'actTicket' ticket.id %}" class="btn btn-sm btn-warning">Editar</a>
+                <a href="{% url 'delTicket' ticket.id %}" class="btn btn-sm btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

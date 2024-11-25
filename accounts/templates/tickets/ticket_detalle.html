@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle del Ticket{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Detalle del Ticket</h1>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ ticket.title }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ ticket.get_status_display }} - {{ ticket.get_priority_display }}</h6>
+        <p class="card-text">{{ ticket.description }}</p>
+        <p><strong>Cliente:</strong> {{ ticket.Cliente }}</p>
+        <p><strong>Asignado a:</strong> {{ ticket.assigned_to|default:"No asignado" }}</p>
+        <p><strong>Creado:</strong> {{ ticket.created_at }}</p>
+        <p><strong>Estado:</strong> {{ ticket.status }}</p>
+    </div>
+</div>
+
+<h2 class="mt-4">Comentarios</h2>
+{% for comment in ticket.comments.all %}
+<div class="card mt-2">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">{{ comment.author }} - {{ comment.created_at }}</h6>
+        <p class="card-text">{{ comment.content }}</p>
+    </div>
+</div>
+{% empty %}
+
+<p>No hay comentarios aún.</p>
+{% endfor %}
+
+<h3 class="mt-4">Agregar comentario</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Enviar comentario</button>
+</form>
+{% endblock %}
