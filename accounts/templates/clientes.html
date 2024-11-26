@@ -4,24 +4,23 @@
 
 {% block content %}
 <h1 class="mb-4">Lista de Clientes</h1>
-<a href="{% url 'registroCliente' %}" class="btn btn-primary mb-3">Registrar Nuevo Cliente</a>
+<a href="{% url 'registro_cliente' %}" class="btn btn-primary mb-3">Registrar Nuevo Cliente</a>
 <table class="table table-striped">
     <thead>
         <tr>
             <th>Nombre</th>
-            <th>Email</th>
+            <th>Correo Electrónico</th>
         </tr>
     </thead>
     <tbody>
-        {% for client in clients %}
+        {% for cliente in clientes %}
         <tr>
-            <td>{{ client.name }}</td>
-            <td>{{ client.email }}</td>
-            
+            <td>{{ cliente.nombre }}</td>
+            <td>{{ cliente.correo }}</td>
         </tr>
         {% empty %}
         <tr>
-            <td colspan="3">No hay clientes registrados.</td>
+            <td colspan="2">No hay clientes registrados.</td>
         </tr>
         {% endfor %}
     </tbody>

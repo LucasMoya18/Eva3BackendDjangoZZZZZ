@@ -1,33 +1,32 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Ticket, Comment,Cliente
+from .models import Ticket, Comentario, Cliente
 
 class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
-        fields = ['title', 'description', 'priority', 'Cliente', 'status', 'assigned_to']
+        fields = ['titulo', 'descripcion', 'prioridad', 'cliente', 'estado', 'asignado_a']
 
-class CommentForm(forms.ModelForm):
+class ComentarioForm(forms.ModelForm):
     class Meta:
-        model = Comment
-        fields = ['content']
+        model = Comentario
+        fields = ['contenido']
 
-class UserRegistrationForm(UserCreationForm):
-    email = forms.EmailField(required=True)
+class RegistroUsuarioForm(UserCreationForm):
 
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
     def save(self, commit=True):
-        user = super(UserRegistrationForm, self).save(commit=False)
-        user.email = self.cleaned_data['email']
+        usuario = super(RegistroUsuarioForm, self).save(commit=False)
+        usuario.email = self.cleaned_data['email']
         if commit:
-            user.save()
-        return user
+            usuario.save()
+        return usuario
 
-class ClientForm(forms.ModelForm):
+class ClienteForm(forms.ModelForm):
     class Meta:
         model = Cliente
-        fields = ['name', 'email']
+        fields = ['nombre', 'correo']

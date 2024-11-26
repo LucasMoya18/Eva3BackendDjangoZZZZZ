@@ -2,42 +2,41 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Cliente(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
+    nombre = models.CharField(max_length=100)
+    correo = models.EmailField()
 
     def __str__(self):
-        return self.name
+        return self.nombre
+    
+
 
 class Ticket(models.Model):
-    STATUS_CHOICES = [
-        ('OPEN', 'Abierto'),
-        ('IN_PROGRESS', 'En Proceso'),
-        ('RESOLVED', 'Resuelto'),
-        ('CLOSED', 'Cerrado'),
+    OPCIONES_ESTADO = [
+        ('ABIERTO', 'Abierto'),
+        ('EN_PROCESO', 'En Proceso'),
+        ('RESUELTO', 'Resuelto'),
+        ('CERRADO', 'Cerrado'),
     ]
-    PRIORITY_CHOICES = [
-        ('LOW', 'Baja'),
-        ('MEDIUM', 'Media'),
-        ('HIGH', 'Alta'),
+    OPCIONES_PRIORIDAD = [
+        ('BAJA', 'Baja'),
+        ('MEDIA', 'Media'),
+        ('ALTA', 'Alta'),
     ]
-    title = models.CharField(max_length=200, verbose_name='Problema:')
-    description = models.TextField(verbose_name='Descripcion:')
-    created_at = models.DateTimeField(auto_now_add=True,verbose_name='Creado en:')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='OPEN', verbose_name='Estado:')
-    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='MEDIUM')
-    Cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
-    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True , verbose_name='Asignado a:')
+    titulo = models.CharField(max_length=200, verbose_name='Problema:')
+    descripcion = models.TextField(default='',verbose_name='Descripción:')
+    creado_en = models.DateTimeField(auto_now_add=True, verbose_name='Creado en:')
+    estado = models.CharField(max_length=20, choices=OPCIONES_ESTADO, default='ABIERTO', verbose_name='Estado:')
+    prioridad = models.CharField(max_length=10, choices=OPCIONES_PRIORIDAD, default='MEDIA', verbose_name='Prioridad:')
+    cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    asignado_a = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Asignado a:')
+
+class Comentario(models.Model):
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='comentarios')
+    autor = models.ForeignKey(User, on_delete=models.CASCADE)
+    contenido = models.TextField(verbose_name='Comentario:')
+    creado_en = models.DateTimeField(auto_now_add=True, verbose_name='Creado en:')
 
     def __str__(self):
-        return f"{self.title} - {self.get_status_display()}"
-
-class Comment(models.Model):
-    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE, related_name='comments')
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.TextField(verbose_name='Comentario:')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Creado en:')
-
-    def __str__(self):
-        return f"Comentado por {self.author.username} en {self.ticket.title}"
+        return f"Comentado por {self.autor.username} en {self.ticket.titulo}"
 
 

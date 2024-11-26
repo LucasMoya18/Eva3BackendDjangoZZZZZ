@@ -6,31 +6,30 @@
 <h1 class="mb-4">Detalle del Ticket</h1>
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">{{ ticket.title }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">{{ ticket.get_status_display }} - {{ ticket.get_priority_display }}</h6>
-        <p class="card-text">{{ ticket.description }}</p>
-        <p><strong>Cliente:</strong> {{ ticket.Cliente }}</p>
-        <p><strong>Asignado a:</strong> {{ ticket.assigned_to|default:"No asignado" }}</p>
-        <p><strong>Creado:</strong> {{ ticket.created_at }}</p>
-        <p><strong>Estado:</strong> {{ ticket.status }}</p>
+        <h5 class="card-title">{{ ticket.titulo }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ ticket.get_estado_display }} - {{ ticket.get_prioridad_display }}</h6>
+        <p class="card-text">{{ ticket.descripcion }}</p>
+        <p><strong>Cliente:</strong> {{ ticket.cliente }}</p>
+        <p><strong>Asignado a:</strong> {{ ticket.asignado_a|default:"No asignado" }}</p>
+        <p><strong>Creado:</strong> {{ ticket.creado_en }}</p>
+        <p><strong>Estado:</strong> {{ ticket.estado }}</p>
     </div>
 </div>
 
 <h2 class="mt-4">Comentarios</h2>
-{% for comment in ticket.comments.all %}
+{% for comentario in ticket.comentarios.all %}
 <div class="card mt-2">
     <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">{{ comment.author }} - {{ comment.created_at }}</h6>
-        <p class="card-text">{{ comment.content }}</p>
+        <h6 class="card-subtitle mb-2 text-muted">{{ comentario.autor }} - {{ comentario.creado_en }}</h6>
+        <p class="card-text">{{ comentario.contenido }}</p>
     </div>
 </div>
 {% empty %}
-
 <p>No hay comentarios aún.</p>
 {% endfor %}
 
 <h3 class="mt-4">Agregar comentario</h3>
-<form method="post">
+<form method="post" class='mb-5'>
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Enviar comentario</button>

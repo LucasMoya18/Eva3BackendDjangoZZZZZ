@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'miproyecto.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'a',
+        'NAME': 'b',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': 'localhost',

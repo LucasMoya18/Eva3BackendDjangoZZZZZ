@@ -3,20 +3,38 @@
 {% block title %}{% if form.instance.pk %}Editar Ticket{% else %}Nuevo Ticket{% endif %}{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">{% if form.instance.pk %}Editar Ticket{% else %}Nuevo Ticket{% endif %}</h1>
-<form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-    <div class="mb-3">
-        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-        {{ field }}
-        {% if field.errors %}
-        <div class="alert alert-danger">
-            {{ field.errors }}
+<div class="row align-items-md-stretch mt-5">
+    <div class="col-12 justify-content-center text-center">
+        <div class="text-white border rounded-4 shadow bg-danger fontsContenedores">
+            <h1>{% if form.instance.pk %}Editar Ticket{% else %}Nuevo Ticket{% endif %}</h1>
         </div>
-        {% endif %}
     </div>
-    {% endfor %}
-    <button type="submit" class="btn btn-primary">Guardar</button>
-</form>
+
+    <div class="col-12 my-4">
+        <div class="shadow rounded-4">
+            <div class="text-white border rounded-top-4 shadow contenedorTituloSala bg-danger fontsContenedores">
+                <h2 class="text-center">Formulario de Ticket</h2>
+            </div>
+            <div class="text-black border bg-white p-3 rounded-bottom-2">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                        <div class="alert alert-danger mt-2">
+                            {{ field.errors }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

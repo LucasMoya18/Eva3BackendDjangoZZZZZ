@@ -3,35 +3,154 @@
 {% block title %}Lista de Tickets{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Lista de Tickets</h1>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Título</th>
-            <th>Estado</th>
-            <th>Prioridad</th>
-            <th>Cliente</th>
-            <th>Asignado a</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for ticket in tickets %}
-        <tr>
-            <td>{{ ticket.id }}</td>
-            <td>{{ ticket.title }}</td>
-            <td>{{ ticket.get_status_display }}</td>
-            <td>{{ ticket.get_priority_display }}</td>
-            <td>{{ ticket.Cliente }}</td>
-            <td>{{ ticket.assigned_to|default:"No asignado" }}</td>
-            <td>
-                <a href="{% url 'ticket_detalle' ticket.id %}" class="btn btn-sm btn-info">Ver</a>
-                <a href="{% url 'actTicket' ticket.id %}" class="btn btn-sm btn-warning">Editar</a>
-                <a href="{% url 'delTicket' ticket.id %}" class="btn btn-sm btn-danger">Eliminar</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+
+<div class="row align-items-md-stretch mt-5">
+    <div class="col-12 justify-content-center align-content-center text-center">
+        <div class="text-white border rounded-4 shadow bg-danger fontsContenedores">
+            
+            <h1>Tickets</h1>
+           
+        </div>
+    </div>
+
+    <div class="col-12 my-4">
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label for="estado" class="form-label">Estado</label>
+                <select name="estado" id="estado" class="form-select">
+                    <option value="">Todos</option>
+                    {% for key, label in estados %}
+                    <option value="{{ key }}" {% if request.GET.estado == key %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="prioridad" class="form-label">Prioridad</label>
+                <select name="prioridad" id="prioridad" class="form-select">
+                    <option value="">Todas</option>
+                    {% for key, label in prioridades %}
+                    <option value="{{ key }}" {% if request.GET.prioridad == key %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="tecnico" class="form-label">Técnico Responsable</label>
+                <select name="tecnico" id="tecnico" class="form-select">
+                    <option value="">Todos</option>
+                    {% for tecnico in tecnicos %}
+                    <option value="{{ tecnico.id }}" {% if request.GET.tecnico == tecnico.id|stringformat:"s" %}selected{% endif %}>
+                        {{ tecnico.username }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3 align-self-end">
+                <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+            </div>
+        </form>
+    </div>
+
+    {% if tickets%}
+    {% for ticket in tickets %}
+    <div class="col-12 col-lg-6 my-4 ">
+        <div class="shadow rounded-4">
+            <div class="text-white border rounded-top-4 shadow contenedorTituloSala bg-danger fontsContenedores">
+                <h2 class="text-center">Ticket {{ticket.id}}</h2>
+            </div>
+            <div class="text-black border bg-white p-3 rounded-bottom-2">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Problema</th>
+                            <td>{{ticket.titulo}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Detalle</th>
+                            <td>{{ticket.descripcion}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Estado</th>
+                            <td>{{ticket.get_estado_display}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Prioridad</th>
+                            <td>{{ticket.get_prioridad_display}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Prioridad</th>
+                            <td>{{ticket.cliente}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Tecnico Responsable</th>
+                            {% if ticket.asignado_a%}
+                                <td>{{ticket.asignado_a}}</td>
+                            {% else %}
+                                <td>No hay</td>
+                            {% endif %}
+
+                        </tr>
+
+                        
+                        
+                        
+
+                    </tbody>
+                </table>
+                <div class='justify-content-end align-content-end text-end'>
+
+                    <a
+                    name=""
+                    id=""
+                    class="btn btn-success"
+                    href="{% url 'ticket_detalle' ticket.id %}"
+                    role="button"
+                    >Editar</a
+                    >
+                    <a
+                        name=""
+                        id=""
+                        class="btn btn-warning"
+                        href="{% url 'actualizar_ticket' ticket.id %}"
+                        role="button"
+                        >Ver</a
+                    >
+                    <a
+                        name=""
+                        id=""
+                        class="btn btn-danger btnEliminacion"
+                        href="{% url 'eliminar_ticket' ticket.id %}"
+                        role="button"
+                        >Cerrar</a
+                    >
+                </div>
+               
+                
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {%else%}
+        <div class='col-12 text-center my-5'>
+            <h1>NO HAY RESULTADOS</h1>
+        </div>
+    {%endif%}
+    
+    
+    <div class="col-12 my-4 ">
+        <div class="text-white rounded-5 shadow rounded-5">
+            <div class="d-grid gap-2">
+                <a
+                    name=""
+                    id=""
+                    class="btn btn-danger"
+                    href="" 
+                    role="button"
+                    >Agregar ticket</a
+                >
+                
+            </div>
+            
+           
+        </div>
+    </div>
 {% endblock %}
