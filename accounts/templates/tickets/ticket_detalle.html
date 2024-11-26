@@ -3,35 +3,96 @@
 {% block title %}Detalle del Ticket{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Detalle del Ticket</h1>
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">{{ ticket.titulo }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">{{ ticket.get_estado_display }} - {{ ticket.get_prioridad_display }}</h6>
-        <p class="card-text">{{ ticket.descripcion }}</p>
-        <p><strong>Cliente:</strong> {{ ticket.cliente }}</p>
-        <p><strong>Asignado a:</strong> {{ ticket.asignado_a|default:"No asignado" }}</p>
-        <p><strong>Creado:</strong> {{ ticket.creado_en }}</p>
-        <p><strong>Estado:</strong> {{ ticket.estado }}</p>
+<div class="row align-items-md-stretch mt-5">
+    <div class="col-12 justify-content-center text-center">
+        <div class="text-white border rounded-4 shadow bg-danger fontsContenedores">
+            <h1>Detalle del Ticket</h1>
+        </div>
+    </div>
+
+    <div class="col-12 my-4">
+        <div class="shadow rounded-4">
+            <div class="text-white border rounded-top-4 shadow contenedorTituloSala bg-danger fontsContenedores">
+                <h2 class="text-center">{{ ticket.titulo }}</h2>
+            </div>
+            <div class="text-black border bg-white p-4 rounded-bottom-2">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Problema</th>
+                            <td>{{ticket.titulo}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Detalle</th>
+                            <td>{{ticket.descripcion}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Estado</th>
+                            <td>{{ticket.get_estado_display}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Prioridad</th>
+                            <td>{{ticket.get_prioridad_display}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Cliente</th>
+                            <td>{{ticket.cliente}}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Tecnico Responsable</th>
+                            {% if ticket.asignado_a%}
+                                <td>{{ticket.asignado_a}}</td>
+                            {% else %}
+                                <td>No hay</td>
+                            {% endif %}
+
+                        </tr>
+                        <tr>
+                            <th scope="row">Creado en</th>
+                            <td>{{ ticket.creado_en }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 my-4">
+        <div class="shadow rounded-4">
+            <div class="text-white border rounded-top-4 shadow contenedorTituloSala bg-danger fontsContenedores">
+                <h3 class="text-center">Comentarios</h3>
+            </div>
+            <div class="text-black border bg-white p-4 rounded-bottom-2">
+                {% for comentario in ticket.comentarios.all %}
+                <div class="card mt-2">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">{{ comentario.autor }} - {{ comentario.creado_en }}</h6>
+                        <p class="card-text">{{ comentario.contenido }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <p>No hay comentarios aún.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 my-4">
+        <div class="shadow rounded-4">
+            <div class="text-white border rounded-top-4 shadow contenedorTituloSala bg-danger fontsContenedores">
+                <h3 class="text-center">Agregar comentario</h3>
+            </div>
+            <div class="text-black border bg-white p-4 rounded-bottom-2">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_contenido" class="form-label">Comentario</label>
+                        {{ form.contenido   }}
+                    </div>
+                    <button type="submit" class="btn btn-danger">Enviar comentario</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
-
-<h2 class="mt-4">Comentarios</h2>
-{% for comentario in ticket.comentarios.all %}
-<div class="card mt-2">
-    <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">{{ comentario.autor }} - {{ comentario.creado_en }}</h6>
-        <p class="card-text">{{ comentario.contenido }}</p>
-    </div>
-</div>
-{% empty %}
-<p>No hay comentarios aún.</p>
-{% endfor %}
-
-<h3 class="mt-4">Agregar comentario</h3>
-<form method="post" class='mb-5'>
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Enviar comentario</button>
-</form>
 {% endblock %}
